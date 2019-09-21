@@ -1,4 +1,6 @@
 class IngestEegCsvFileJob < ApplicationJob
+  class InvalidCSVDataError < StandardError; end
+  
   queue_as :default
 
   def perform(in_file)
@@ -16,6 +18,9 @@ class IngestEegCsvFileJob < ApplicationJob
       when /^%/
         next
       when /^\d/
+        if (number_of_channels.to_i <= 0) then
+          raise InvalidCSVDataError.new("Number of channels unknown")
+        end
         values = row[1..number_of_channels].map(&:to_f)
         timestamp = row.last.to_i
         seconds_epoch = timestamp.to_i/1000
