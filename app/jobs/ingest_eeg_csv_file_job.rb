@@ -1,12 +1,13 @@
 class IngestEegCsvFileJob < ApplicationJob
   class InvalidCSVDataError < StandardError; end
-  
+
   queue_as :default
 
   def perform(in_file)
     rs = ReadingSession.create!(name: File.basename(in_file, ".*"))
     number_of_channels = nil
     sample_rate = nil
+    samples = []
     CSV.foreach(in_file) do |row|
       case row[0]
       when /number.*of.*channels.+?(\d+)/i
@@ -26,12 +27,19 @@ class IngestEegCsvFileJob < ApplicationJob
         seconds_epoch = timestamp.to_i/1000
         microseconds = timestamp - seconds_epoch * 1000
         timestamp = Time.at(seconds_epoch, microseconds)
-        bs = BrainSample.create(
-          reading_session: rs,
-          channel_values: values,
-          recorded_at: timestamp
-        )
+        samples << [
+          rs.id,
+          values,
+          timestamp
+        ]
+        if samples.count >= 1000 then
+          BrainSample.mass_insert(samples)
+          samples = []
+        end
       end
+    end
+    if samples.count > 0 then
+      BrainSample.mass_insert(samples)
     end
   end
 end
