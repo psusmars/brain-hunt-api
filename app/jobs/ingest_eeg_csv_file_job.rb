@@ -28,9 +28,7 @@ class IngestEegCsvFileJob < ApplicationJob
           channel_values: values,
           recorded_at: timestamp
         )
-        binding.pry
       end
-      # puts row
     end
   end
 end
