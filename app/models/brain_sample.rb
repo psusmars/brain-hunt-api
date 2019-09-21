@@ -1,4 +1,5 @@
 class BrainSample < ApplicationRecord
+  default_scope { order(recorded_at: :asc) }
   belongs_to :reading_session
   validates_presence_of :channel_values, :reading_session
 

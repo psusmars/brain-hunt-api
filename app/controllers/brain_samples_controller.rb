@@ -4,7 +4,7 @@ class BrainSamplesController < ApplicationController
 
   # GET /brain_samples
   def index
-    @brain_samples = @reading_session.brain_samples.pluck(:channel_values, :recorded_at)
+    @brain_samples = @reading_session.brain_samples
   end
 
   # GET /brain_samples/1

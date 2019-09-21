@@ -25,7 +25,8 @@ class IngestEegCsvFileJob < ApplicationJob
         values = row[1..number_of_channels].map(&:to_f)
         timestamp = row.last.to_i
         seconds_epoch = timestamp.to_i/1000
-        microseconds = timestamp - seconds_epoch * 1000
+        # Convert to microseconds
+        microseconds = (timestamp - seconds_epoch * 1000) * 1000 
         timestamp = Time.at(seconds_epoch, microseconds)
         samples << [
           rs.id,

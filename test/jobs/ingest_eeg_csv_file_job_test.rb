@@ -11,7 +11,7 @@ class IngestEegCsvFileJobTest < ActiveJob::TestCase
     assert_equal 9, BrainSample.count
     bs = BrainSample.first
     assert_equal rs, bs.reading_session
-    assert_equal 91, bs.recorded_at.usec
+    assert_equal 91000, bs.recorded_at.usec, "Should be 91000 microseconds, aka 91 milliseconds"
     assert_equal 1567561661.0000908, bs.recorded_at.to_f
   end
 
