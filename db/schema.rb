@@ -10,19 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_21_144632) do
+ActiveRecord::Schema.define(version: 2019_09_21_220925) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "brain_samples", force: :cascade do |t|
-    t.decimal "sample_rate"
-    t.integer "number_of_channels"
     t.bigint "reading_session_id", null: false
     t.string "channel_values", array: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.datetime "recorded_at"
+    t.datetime "recorded_at", precision: 6
     t.index ["reading_session_id"], name: "index_brain_samples_on_reading_session_id"
   end
 
@@ -31,6 +29,8 @@ ActiveRecord::Schema.define(version: 2019_09_21_144632) do
     t.text "notes"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "sample_rate"
+    t.integer "number_of_channels"
   end
 
   add_foreign_key "brain_samples", "reading_sessions"

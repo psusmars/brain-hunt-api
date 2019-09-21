@@ -9,8 +9,10 @@ class IngestEegCsvFileJob < ApplicationJob
       case row[0]
       when /number.*of.*channels.+?(\d+)/i
         number_of_channels = $1.to_i
+        rs.update(number_of_channels: number_of_channels)
       when /sample.*rate*.+?(\d+\.?\d*)/i
         sample_rate = $1.to_f
+        rs.update(sample_rate: sample_rate)
       when /^%/
         next
       when /^\d/
@@ -19,11 +21,7 @@ class IngestEegCsvFileJob < ApplicationJob
         seconds_epoch = timestamp.to_i/1000
         microseconds = timestamp - seconds_epoch * 1000
         timestamp = Time.at(seconds_epoch, microseconds)
-        # binding.pry
-        # .to_a.map(&:to_f)
         bs = BrainSample.create(
-          sample_rate: sample_rate,
-          number_of_channels: number_of_channels,
           reading_session: rs,
           channel_values: values,
           recorded_at: timestamp
