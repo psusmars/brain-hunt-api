@@ -1,9 +1,10 @@
 class BrainSamplesController < ApplicationController
+  before_action :set_reading_session, only: [:index, :create]
   before_action :set_brain_sample, only: [:show, :update, :destroy]
 
   # GET /brain_samples
   def index
-    @brain_samples = BrainSample.all
+    @brain_samples = @reading_ession.brain_samples
 
     render json: @brain_samples
   end
@@ -15,7 +16,7 @@ class BrainSamplesController < ApplicationController
 
   # POST /brain_samples
   def create
-    @brain_sample = BrainSample.new(brain_sample_params)
+    @brain_sample = @reading_session.brain_samples.build(brain_sample_params)
 
     if @brain_sample.save
       render json: @brain_sample, status: :created, location: @brain_sample
@@ -39,6 +40,10 @@ class BrainSamplesController < ApplicationController
   end
 
   private
+    def set_reading_session
+      @reading_session = ReadingSession.find(params[:reading_session_id])
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_brain_sample
       @brain_sample = BrainSample.find(params[:id])

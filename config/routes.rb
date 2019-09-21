@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  resources :brain_samples
-  resources :reading_sessions
+  resources :reading_sessions do
+    resources :brain_samples
+  end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
