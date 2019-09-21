@@ -4,9 +4,7 @@ class BrainSamplesController < ApplicationController
 
   # GET /brain_samples
   def index
-    @brain_samples = @reading_session.brain_samples.pluck(:values, :recorded_at)
-
-    render json: {brain_samples: @brain_samples, reading_session: @reading_session, links: {reading_session: reading_session_url(@reading_session)}
+    @brain_samples = @reading_session.brain_samples.pluck(:channel_values, :recorded_at)
   end
 
   # GET /brain_samples/1
