@@ -4,8 +4,6 @@ class ReadingSessionsController < ApplicationController
   # GET /reading_sessions
   def index
     @reading_sessions = ReadingSession.all
-
-    render json: @reading_sessions
   end
 
   # GET /reading_sessions/1
