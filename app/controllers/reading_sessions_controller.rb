@@ -3,12 +3,19 @@ class ReadingSessionsController < ApplicationController
 
   # GET /reading_sessions
   def index
-    @reading_sessions = ReadingSession.all
+    @reading_sessions = ReadingSession.order(name: :asc)
   end
 
   # GET /reading_sessions/1
   def show
     render json: @reading_session
+  end
+
+  def process_txt_file
+    IngestEegCsvFileJob.perform_now({
+      name: params[:name],
+      file: params[:file]
+    })
   end
 
   # POST /reading_sessions
